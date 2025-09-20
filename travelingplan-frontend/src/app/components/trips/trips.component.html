@@ -1,0 +1,8 @@
+<h2>Generador de viajes</h2>
+
+<input [(ngModel)]="prompt" placeholder="Escribe tu prompt" />
+<button (click)="generate()">Generar viaje</button>
+
+<p *ngIf="loading">Generando...</p>
+
+<pre *ngIf="result">{{ result | json }}</pre>
