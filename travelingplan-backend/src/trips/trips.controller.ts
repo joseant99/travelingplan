@@ -7,6 +7,7 @@ export class TripsController {
 
   @Post('generate')
   async generateTrip(@Body() body: { prompt: string }) {
+    console.log(body);
     const guide = await this.tripsService.generateTrip(body.prompt);
     return { guide };
   }

@@ -4,13 +4,12 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class TripsService {
-  private baseUrl = 'https://friendly-carnival-7pprrj6pw63r9vj-3000.app.github.dev/trips/generate';
+  private baseUrl = 'http://localhost:3000/trips/generate';
   async generateTrip(prompt: string): Promise<any> {
     const res = await fetch(this.baseUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt }),
-      mode: 'no-cors'
+      body: JSON.stringify({ prompt })
     });
 
     if (!res.ok) throw new Error('Error en la petición');
