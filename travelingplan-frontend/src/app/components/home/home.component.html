@@ -1,0 +1,39 @@
+<div class="home-block">
+  <app-centered-title
+    title="PLANIFICADOR DE VIAJES CON VUELOS, HOTELES Y EXPERIENCIAS"
+    subtitle="Un creador de viajes personalizado y un generador de itinerarios que le ahorra horas en la planificación de vuelos, hoteles y actividades"
+    buttonText="Explorar viajes"
+    buttonLink="/trips">
+  </app-centered-title>
+</div>
+
+<div style="margin: 100px">
+  <app-icon-card-block
+    [cards]="[
+      { icon: 'flight', label: 'Itinerarios' },
+      { icon: 'flight', label: 'Vuelos' },
+      { icon: 'hotel', label: 'Hoteles' },
+      { icon: 'directions_car', label: 'Alquiler de coches' },
+      { icon: 'explore', label: 'Excursiones' },
+      { icon: 'explore', label: 'Restaurantes' }
+    ]">
+  </app-icon-card-block>
+</div>
+
+<div class="home-block" style="margin: 40px 0">
+  <app-image-text-block
+    [title]="'Explora destinos increíbles'"
+    [subtitle]="'Descubre lugares únicos y planifica tu viaje con facilidad'"
+    [imageUrl]="'assets/images/roma.jpg'"
+    [imageLeft]="true">
+  </app-image-text-block>
+</div>
+
+<div class="home-block" style="margin: 40px 0">
+  <app-image-text-block
+    [title]="'Organiza tu viaje'"
+    [subtitle]="'Crea itinerarios personalizados y comparte con tus amigos'"
+    [imageUrl]="'assets/images/maps.png'"
+    [imageLeft]="false">
+  </app-image-text-block>
+</div>

@@ -1,0 +1,7 @@
+<mat-card class="centered-title-card">
+  <h1>{{ title }}</h1>
+  <p *ngIf="subtitle">{{ subtitle }}</p>
+  <button *ngIf="buttonText" mat-raised-button color="primary" [routerLink]="buttonLink">
+    {{ buttonText }}
+  </button>
+</mat-card>

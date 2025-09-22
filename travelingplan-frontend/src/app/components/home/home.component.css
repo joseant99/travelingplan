@@ -1,0 +1,14 @@
+.home-block {
+  margin: 60px 0;   /* espacio vertical entre bloques */
+  display: flex;
+  justify-content: center;  /* centra el bloque dentro del contenedor */
+  width: 100%;
+}
+
+/* Opcional: menor margen en móvil */
+@media (max-width: 768px) {
+  .home-block {
+    margin: 40px 0;
+    padding: 0 15px;
+  }
+}

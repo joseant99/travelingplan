@@ -1,0 +1,45 @@
+.app-toolbar {
+  width: 100%;
+  margin: 0;
+  background-color: #f1f1f1; 
+  color: #333;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.toolbar-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+button.mat-icon-button {
+  color: #333;
+}
+
+.sidenav-container {
+  height: calc(100vh - 64px); /* Altura de la pantalla menos toolbar */
+}
+
+.content {
+  padding: 20px;
+}
+
+.welcome {
+  text-align: center;
+}
+
+.welcome h2 {
+  font-weight: 400;
+  color: #555;
+  margin: 0 0 20px 0;
+}

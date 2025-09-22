@@ -1,0 +1,12 @@
+<div class="image-text-container" [ngClass]="{'reverse': !imageLeft}">
+  <div class="image-wrapper">
+    <img [src]="imageUrl" alt="{{ title }}">
+  </div>
+  <div class="text-wrapper">
+    <h2>{{ title }}</h2>
+    <p>{{ subtitle }}</p>
+    <button *ngIf="buttonText && buttonLink" mat-raised-button color="primary" [routerLink]="buttonLink">
+      {{ buttonText }}
+    </button>
+  </div>
+</div>
