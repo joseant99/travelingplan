@@ -6,9 +6,9 @@ async function bootstrap() {
 
   // Habilita CORS
   app.enableCors({
-  origin: 'http://localhost:4200', // subdominio exacto del frontend
+  origin: ['http://localhost:4200', 'https://travelingplan.vercel.app'],
   methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type']
+  allowedHeaders: ['Content-Type', 'Authorization'],
 });
 
   await app.listen(3000);
