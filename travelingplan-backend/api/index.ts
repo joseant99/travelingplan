@@ -32,6 +32,10 @@ export default async function handler(req: any, res: any) {
     } catch {}
   }
 
+  if (req.url?.startsWith('/api')) {
+    req.url = req.url.replace('/api', '');
+  }
+
   // Pasar request a NestJS
   return (app.getHttpAdapter().getInstance() as any)(req, res);
 }
