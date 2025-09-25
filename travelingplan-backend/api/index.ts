@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../src/app.module';
 import serverlessExpress from '@vendia/serverless-express';
 
-const cors = require('cors'); // ← cambio aquí
+const cors = require('cors'); // evita problemas de import
 
 let cachedServer: any;
 
@@ -14,7 +14,7 @@ async function bootstrap() {
     expressApp.use(cors({
       origin: 'https://travelingplan.vercel.app',
       methods: ['GET','POST','OPTIONS'],
-      allowedHeaders: ['Content-Type','Authorization']
+      allowedHeaders: ['Content-Type','Authorization'],
     }));
 
     expressApp.options('*', cors());
@@ -27,6 +27,14 @@ async function bootstrap() {
 
 export default async function handler(req: any, res: any) {
   const server = await bootstrap();
-  if (req.url.startsWith('/api/')) req.url = req.url.replace('/api', '');
+
+  // Convierte cualquier URL absoluta a path relativo
+  try {
+    const urlObj = new URL(req.url, `https://${req.headers.host}`);
+    req.url = urlObj.pathname + urlObj.search;
+  } catch {
+    // si ya es relativo, no hacer nada
+  }
+
   return server(req, res);
 }
