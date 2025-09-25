@@ -2,9 +2,10 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": ".",
-    "module": "commonjs",
+    "rootDir": "src",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "target": "es2017"
   },
-  "include": ["src/**/*", "api/**/*"]
+  "include": ["src/**/*"]
 }
