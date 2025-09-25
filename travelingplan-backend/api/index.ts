@@ -28,12 +28,20 @@ async function bootstrap() {
 export default async function handler(req: any, res: any) {
   const server = await bootstrap();
 
-  // Convierte cualquier URL absoluta a path relativo
-  try {
-    const urlObj = new URL(req.url, `https://${req.headers.host}`);
-    req.url = urlObj.pathname + urlObj.search;
-  } catch {
-    // si ya es relativo, no hacer nada
+  // ⚡ Normaliza la URL para que Nest siempre vea solo paths relativos
+  if (req.url) {
+    try {
+      // Si req.url es absoluta, extrae solo path + query
+      const urlObj = new URL(req.url, `https://${req.headers.host}`);
+      req.url = urlObj.pathname + urlObj.search;
+    } catch {
+      // si ya es relativo, no hacer nada
+    }
+
+    // Opcional: elimina el prefijo /api para Nest
+    if (req.url.startsWith('/api')) {
+      req.url = req.url.replace('/api', '');
+    }
   }
 
   return server(req, res);
