@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../src/app.module';
 import serverlessExpress from '@vendia/serverless-express';
-import * as cors from 'cors';
+import cors from 'cors';
 
 let cachedServer: any;
 
@@ -10,16 +10,16 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     const expressApp = app.getHttpAdapter().getInstance();
 
-    // ⚡ Habilitar CORS sobre Express
+    // Habilitar CORS
     expressApp.use(
       cors({
         origin: 'https://travelingplan.vercel.app', // tu frontend
-        methods: ['GET', 'POST', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Authorization'],
+        methods: ['GET','POST','OPTIONS'],
+        allowedHeaders: ['Content-Type','Authorization']
       })
     );
 
-    // Manejar preflight requests para serverless
+    // Manejar preflight
     expressApp.options('*', cors());
 
     await app.init();
