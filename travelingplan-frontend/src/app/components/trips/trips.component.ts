@@ -98,6 +98,10 @@ export class TripsComponent implements AfterViewChecked {
     this.filteredSuggestions = [];
   }
 
+  isCountry(name: string): boolean {
+    return this.locations.some(l => l.country === name);
+  }
+
   sendUserInput() {
     const input = this.userInput.trim();
     if (!input) return;

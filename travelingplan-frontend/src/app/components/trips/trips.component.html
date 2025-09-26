@@ -32,11 +32,12 @@
         <ul *ngIf="filteredSuggestions.length" 
             class="absolute top-full left-0 w-full mt-1 max-h-60 overflow-y-auto bg-white border border-gray-300 rounded-lg shadow-lg z-10">
           <li *ngFor="let s of filteredSuggestions"
-              (click)="selectSuggestion(s)"
-              class="p-3 hover:bg-blue-100 cursor-pointer transition-colors flex items-center gap-2">
-            <span *ngIf="locations.find(l => l.country === s)" class="font-bold text-gray-700">{{ s }}</span>
-            <span *ngIf="!locations.find(l => l.country === s)">{{ s }}</span>
-          </li>
+            (click)="selectSuggestion(s)"
+            class="p-3 hover:bg-blue-100 cursor-pointer transition-colors flex items-center gap-2">
+
+          <span *ngIf="isCountry(s)" class="font-bold text-gray-700">{{ s }}</span>
+          <span *ngIf="!isCountry(s)">{{ s }}</span>
+        </li>
         </ul>
       </div>
     </div>
