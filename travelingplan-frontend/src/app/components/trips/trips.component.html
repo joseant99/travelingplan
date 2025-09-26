@@ -1,21 +1,54 @@
-<div class="chat-container">
-  <!-- Mensajes -->
-  <div *ngFor="let msg of messages" class="chat-message" [ngClass]="msg.sender">
-    {{ msg.text }}
+<div class="h-screen flex flex-col items-center bg-gray-100 p-4">
+
+  <!-- Chat -->
+  <div class="w-full max-w-3xl flex flex-col" style="height: 65vh;">
+
+    <!-- Mensajes -->
+    <div class="flex-1 flex flex-col p-4 space-y-2 overflow-y-auto bg-white rounded-t-lg shadow-md" #messagesContainer>
+      <div *ngFor="let msg of messages" 
+           [ngClass]="{'self-start bg-blue-100': msg.sender === 'bot', 'self-end bg-green-200': msg.sender === 'user'}"
+           class="p-3 rounded-lg break-words max-w-[80%]">
+        {{ msg.text }}
+      </div>
+      <div *ngIf="loading" class="self-start bg-blue-100 p-3 rounded-lg">Generando viaje...</div>
+    </div>
+
+    <!-- Input y sugerencias -->
+    <div class="flex flex-col gap-1 mt-2 relative">
+      <div class="flex gap-2 relative">
+        <input type="text"
+               [(ngModel)]="userInput"
+               (input)="filterSuggestions()"
+               (keydown.enter)="sendUserInput()"
+               placeholder="Escribe país o ciudad..."
+               class="flex-1 border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+        <button (click)="sendUserInput()"
+                class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition">
+          Enviar
+        </button>
+
+        <!-- Lista de sugerencias debajo del input -->
+        <ul *ngIf="filteredSuggestions.length" 
+            class="absolute top-full left-0 w-full mt-1 max-h-60 overflow-y-auto bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+          <li *ngFor="let s of filteredSuggestions"
+              (click)="selectSuggestion(s)"
+              class="p-3 hover:bg-blue-100 cursor-pointer transition-colors flex items-center gap-2">
+            <span *ngIf="locations.find(l => l.country === s)" class="font-bold text-gray-700">{{ s }}</span>
+            <span *ngIf="!locations.find(l => l.country === s)">{{ s }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Opciones dinámicas (fechas) -->
+    <div *ngIf="currentOptions.length" class="flex flex-wrap gap-2 mt-2">
+      <button *ngFor="let option of currentOptions" 
+              (click)="selectOption(option)" 
+              class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+        {{ option }}
+      </button>
+    </div>
+
   </div>
-
-  <!-- Opciones del bot -->
-  <div *ngIf="currentOptions.length" class="options-container">
-    <button *ngFor="let option of currentOptions" (click)="selectOption(option)">
-      {{ option }}
-    </button>
-  </div>
-
-  <!-- Cargando -->
-  <div *ngIf="loading" class="chat-message bot">Generando viaje...</div>
-</div>
-
-<div class="chat-input">
-    <input class="input-msj" />
-    <button class="button-msj">Enviar</button>
 </div>
