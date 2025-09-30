@@ -1,37 +1,57 @@
-<mat-toolbar color="primary" class="app-toolbar">
-  <!-- Botón para abrir el sidenav -->
-  <button mat-icon-button (click)="drawer.toggle()" aria-label="Menú">
-    <mat-icon>menu</mat-icon>
-  </button>
+<!-- Navbar -->
+<header class="bg-white-500 text-white shadow-md">
+  <div class="flex items-center justify-between px-4 py-3 md:px-8">
 
-  <!-- Título centrado -->
-  <span class="toolbar-title">TravelingPlan</span>
+    <!-- Botón menú -->
+    <button (click)="drawerOpen = !drawerOpen" class="md:hidden">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+           viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
 
-  <span class="spacer"></span>
+    <!-- Título -->
+    <span class="text-lg text-gray-800 font-semibold">TravelingPlan</span>
 
-  <!-- Iconos a la derecha -->
-  <button mat-icon-button aria-label="Home">
-    <mat-icon>home</mat-icon>
-  </button>
-  <button mat-icon-button aria-label="Perfil">
-    <mat-icon>account_circle</mat-icon>
-  </button>
-</mat-toolbar>
-
-<!-- Contenedor de sidenav -->
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer mode="over">
-    <mat-nav-list>
-      <a mat-list-item href="#"><mat-icon>explore</mat-icon> Explorar</a>
-      <a mat-list-item href="#"><mat-icon>bookmark</mat-icon> Mis viajes</a>
-      <a mat-list-item href="#"><mat-icon>settings</mat-icon> Ajustes</a>
-    </mat-nav-list>
-  </mat-sidenav>
-
-  <mat-sidenav-content>
-    <!-- Contenido principal -->
-    <div class="content">
-     <router-outlet></router-outlet>
+    <!-- Iconos -->
+    <div class="hidden md:flex gap-4">
+      <a routerLink="/" class="text-gray-500 hover:text-gray-800">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 9.75L12 4.5l9 5.25M4.5 10.5V20h15v-9.5"/>
+        </svg>
+      </a>
+      <a routerLink="/profile" class="text-gray-500 hover:text-gray-800">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M5.121 17.804A9 9 0 1118.879 6.196M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+      </a>
     </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  </div>
+
+  <!-- Menú lateral móvil -->
+  <div *ngIf="drawerOpen" class="md:hidden bg-blue-700">
+    <nav class="flex flex-col px-4 py-2 space-y-2">
+      <a href="#" class="flex items-center gap-2 text-gray-800 hover:text-gray-300">
+        <span>🌍</span> Explorar
+      </a>
+      <a href="#" class="flex items-center gap-2 text-gray-800 hover:text-gray-300">
+        <span>📑</span> Mis viajes
+      </a>
+      <a href="#" class="flex items-center gap-2 text-gray-800 hover:text-gray-300">
+        <span>⚙️</span> Ajustes
+      </a>
+    </nav>
+  </div>
+</header>
+
+<!-- Contenido principal -->
+<main class="min-h-screen bg-gray-50">
+  <div class="p-6">
+    <router-outlet></router-outlet>
+  </div>
+</main>

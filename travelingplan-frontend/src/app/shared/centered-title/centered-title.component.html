@@ -1,7 +1,20 @@
-<mat-card class="centered-title-card">
-  <h1>{{ title }}</h1>
-  <p *ngIf="subtitle">{{ subtitle }}</p>
-  <button *ngIf="buttonText" mat-raised-button color="primary" [routerLink]="buttonLink">
+<div class="max-w-5xl mx-auto text-center p-2 bg-white-50 rounded-xl mt-8 mb-8 
+            lg:mt-20 lg:mb-20 xl:mt-28 xl:mb-28">
+  <!-- Título -->
+  <h1 class="text-4xl md:text-6xl xl:text-7xl font-bold text-black-700 mb-8">
+    {{ title }}
+  </h1>
+
+  <!-- Subtítulo -->
+  <p *ngIf="subtitle" 
+     class="mx-auto my-3 max-w-2xl text-center text-gray-700 sm:mx-auto sm:mt-5 sm:text-base md:mt-5 md:text-lg xl:text-xl mb-8">
+    {{ subtitle }}
+  </p>
+
+  <!-- Botón -->
+  <button *ngIf="buttonText" 
+          [routerLink]="buttonLink"
+          class="bg-purple-500 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition">
     {{ buttonText }}
   </button>
-</mat-card>
+</div>
