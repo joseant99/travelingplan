@@ -2,21 +2,17 @@ import { Component, ElementRef, ViewChild, AfterViewChecked } from '@angular/cor
 import { NgForOf, NgClass, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TripsService } from '../../services/trips.service';
+import { TravelWizardComponent } from '../../pages/travel-wizard/travel-wizard.component';
 
 interface Message {
   sender: 'bot' | 'user';
   text: string;
 }
 
-interface Location {
-  country: string;
-  cities: string[];
-}
-
 @Component({
   selector: 'app-trips',
   standalone: true,
-  imports: [NgForOf, NgClass, NgIf, FormsModule],
+  imports: [NgForOf, NgClass, NgIf, FormsModule, TravelWizardComponent],
   templateUrl: './trips.component.html',
 })
 export class TripsComponent implements AfterViewChecked {
@@ -25,18 +21,9 @@ export class TripsComponent implements AfterViewChecked {
   messages: Message[] = [];
   loading = false;
 
-  userInput = '';
-  locations: Location[] = [];
-  filteredSuggestions: string[] = [];
+  chatPrompt = '';
 
-  sitio = '';
-  fecha = '';
-  currentOptions: string[] = [];
-
-  constructor(private tripsService: TripsService) {
-    this.loadLocations();
-    this.startChat();
-  }
+  constructor(private tripsService: TripsService) {}
 
   ngAfterViewChecked() {
     this.scrollToBottom();
@@ -48,20 +35,6 @@ export class TripsComponent implements AfterViewChecked {
     }
   }
 
-  private loadLocations() {
-    this.locations = [
-      { country: 'España', cities: ['Madrid', 'Barcelona', 'Valencia', 'Sevilla'] },
-      { country: 'Francia', cities: ['París', 'Marsella', 'Lyon'] },
-      { country: 'Italia', cities: ['Roma', 'Milán', 'Florencia'] },
-      { country: 'Alemania', cities: ['Berlín', 'Múnich', 'Hamburgo'] },
-      { country: 'Portugal', cities: ['Lisboa', 'Oporto'] },
-    ];
-  }
-
-  startChat() {
-    this.addBotMessage('¡Hola! Vamos a planear tu viaje. Escribe el país o ciudad a la que quieres ir:');
-  }
-
   addBotMessage(text: string) {
     this.messages.push({ sender: 'bot', text });
   }
@@ -70,67 +43,18 @@ export class TripsComponent implements AfterViewChecked {
     this.messages.push({ sender: 'user', text });
   }
 
-  filterSuggestions() {
-    const val = this.userInput.toLowerCase().trim();
-    if (!val) {
-      this.filteredSuggestions = [];
-      return;
-    }
-
-    const results: string[] = [];
-
-    for (const loc of this.locations) {
-      if (loc.country.toLowerCase().includes(val)) {
-        results.push(loc.country);
-      }
-      for (const city of loc.cities) {
-        if (city.toLowerCase().includes(val)) {
-          results.push(city);
-        }
-      }
-    }
-
-    this.filteredSuggestions = results.slice(0, 10);
-  }
-
-  selectSuggestion(value: string) {
-    this.userInput = value;
-    this.filteredSuggestions = [];
-  }
-
-  isCountry(name: string): boolean {
-    return this.locations.some(l => l.country === name);
-  }
-
-  sendUserInput() {
-    const input = this.userInput.trim();
-    if (!input) return;
-
-    this.addUserMessage(input);
-    this.sitio = input;
-    this.userInput = '';
-    this.filteredSuggestions = [];
-
-    // Siguiente paso: fechas
-    this.currentOptions = ['2025-10-01','2025-10-15','2025-11-01'];
-    this.addBotMessage('Elige la fecha:');
-  }
-
-  async selectOption(option: string) {
-    this.addUserMessage(option);
-
-    if (!this.fecha) {
-      this.fecha = option;
-      this.currentOptions = [];
-      await this.generateTrip();
-    }
+  receivePrompt(prompt: string) {
+    this.chatPrompt = prompt;
+    this.addBotMessage('¡Perfecto! Vamos a planear tu viaje basado en tu selección:');
+    this.addBotMessage(this.chatPrompt);
+    this.generateTrip();
   }
 
   async generateTrip() {
+    if (!this.chatPrompt) return;
     this.loading = true;
-    const prompt = `Quiero viajar a ${this.sitio} en la fecha ${this.fecha || 'no definida'}`;
     try {
-      const result = await this.tripsService.generateTrip(prompt);
+      const result = await this.tripsService.generateTrip(this.chatPrompt);
       this.addBotMessage(`¡Listo! Aquí tienes tu viaje:\n${JSON.stringify(result)}`);
     } catch (err) {
       this.addBotMessage(`Error: ${(err as Error).message}`);

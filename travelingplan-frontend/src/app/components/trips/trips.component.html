@@ -1,54 +1,28 @@
-<div class="h-screen flex flex-col items-center bg-gray-100 p-4">
+<div class="flex flex-col min-h-screen w-full">
+
+  <!-- Wizard -->
+  <app-travel-wizard 
+    *ngIf="!chatPrompt" 
+    (wizardCompleted)="receivePrompt($event)"
+    class="w-full max-w-4xl mx-auto p-4 sm:p-6 box-border">
+  </app-travel-wizard>
 
   <!-- Chat -->
-  <div class="w-full max-w-3xl flex flex-col" style="height: 65vh;">
+  <div *ngIf="chatPrompt" class="flex-1 w-full max-w-3xl mx-auto flex flex-col p-4 sm:p-6 box-border">
 
-    <!-- Mensajes -->
-    <div class="flex-1 flex flex-col p-4 space-y-2 overflow-y-auto bg-white rounded-t-lg shadow-md" #messagesContainer>
+    <!-- Mensajes con scroll interno -->
+    <div #messagesContainer class="flex-1 flex flex-col space-y-2 overflow-y-auto bg-white rounded-t-lg shadow-md p-4 box-border">
+      
       <div *ngFor="let msg of messages" 
            [ngClass]="{'self-start bg-blue-100': msg.sender === 'bot', 'self-end bg-green-200': msg.sender === 'user'}"
            class="p-3 rounded-lg break-words max-w-[80%]">
         {{ msg.text }}
       </div>
-      <div *ngIf="loading" class="self-start bg-blue-100 p-3 rounded-lg">Generando viaje...</div>
-    </div>
 
-    <!-- Input y sugerencias -->
-    <div class="flex flex-col gap-1 mt-2 relative">
-      <div class="flex gap-2 relative">
-        <input type="text"
-               [(ngModel)]="userInput"
-               (input)="filterSuggestions()"
-               (keydown.enter)="sendUserInput()"
-               placeholder="Escribe país o ciudad..."
-               class="flex-1 border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400">
-
-        <button (click)="sendUserInput()"
-                class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition">
-          Enviar
-        </button>
-
-        <!-- Lista de sugerencias debajo del input -->
-        <ul *ngIf="filteredSuggestions.length" 
-            class="absolute top-full left-0 w-full mt-1 max-h-60 overflow-y-auto bg-white border border-gray-300 rounded-lg shadow-lg z-10">
-          <li *ngFor="let s of filteredSuggestions"
-            (click)="selectSuggestion(s)"
-            class="p-3 hover:bg-blue-100 cursor-pointer transition-colors flex items-center gap-2">
-
-          <span *ngIf="isCountry(s)" class="font-bold text-gray-700">{{ s }}</span>
-          <span *ngIf="!isCountry(s)">{{ s }}</span>
-        </li>
-        </ul>
+      <div *ngIf="loading" class="self-start bg-blue-100 p-3 rounded-lg">
+        Generando viaje...
       </div>
-    </div>
 
-    <!-- Opciones dinámicas (fechas) -->
-    <div *ngIf="currentOptions.length" class="flex flex-wrap gap-2 mt-2">
-      <button *ngFor="let option of currentOptions" 
-              (click)="selectOption(option)" 
-              class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
-        {{ option }}
-      </button>
     </div>
 
   </div>

@@ -3,7 +3,8 @@
   <div class="icon-card flex flex-col items-center p-6 
               rounded-xl shadow-md hover:shadow-xl transition 
               transform hover:-translate-y-2 duration-300 w-40 sm:w-44 md:w-48 lg:w-52"
-       *ngFor="let card of cards">
+       *ngFor="let card of cards" [routerLink]="['/funciones', card.route]" role="button"
+  tabindex="0">
     <lucide-icon [name]="card.icon" class="w-10 h-10 text-purple-500 mb-1"></lucide-icon>
     <span class="label text-lg font-medium text-gray-800 text-center">{{ card.label }}</span>
   </div>

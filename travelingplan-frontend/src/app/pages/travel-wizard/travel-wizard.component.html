@@ -1,0 +1,66 @@
+<div class="flex flex-col w-full max-w-4xl mx-auto p-4 sm:p-6 bg-white rounded-xl shadow-lg box-border min-h-[60vh]">
+
+  <!-- Contenido con scroll interno si es necesario -->
+  <div class="flex-1 overflow-y-auto">
+
+    <!-- Paso 1: Destino -->
+    <div *ngIf="step === 1">
+      <h2 class="text-2xl font-bold mb-4">1. Selecciona tu destino</h2>
+      <input type="text" placeholder="Escribe para filtrar..." [(ngModel)]="searchText" class="w-full border rounded p-2 mb-2 box-border"/>
+      <ul class="border rounded max-h-48 overflow-auto">
+        <li *ngFor="let city of filteredCities()" (click)="selectCity(city)" class="p-2 hover:bg-blue-100 cursor-pointer">
+          {{ city.country }} - {{ city.name }}
+        </li>
+      </ul>
+      <p *ngIf="selectedCity" class="mt-2 text-green-600">
+        Has seleccionado: {{ selectedCity.country }} - {{ selectedCity.name }}
+      </p>
+    </div>
+
+    <!-- Paso 2: Número de días -->
+    <div *ngIf="step === 2" class="flex flex-col">
+      <h2 class="text-2xl font-bold mb-4">2. Número de días</h2>
+      <div class="flex items-center justify-center gap-4 mt-10">
+        <button (click)="decrementDays()" class="px-4 py-2 bg-gray-200 rounded">-</button>
+        <span class="text-xl font-semibold">{{ days }}</span>
+        <button (click)="incrementDays()" class="px-4 py-2 bg-gray-200 rounded">+</button>
+      </div>
+    </div>
+
+    <!-- Paso 3: Estilo -->
+    <div *ngIf="step === 3" class="flex flex-col">
+      <h2 class="text-2xl font-bold mb-4">3. Estilo de viaje</h2>
+      <div class="flex items-center justify-center gap-4 mt-10">
+        <button *ngFor="let style of styles" (click)="selectedStyle = style"
+                [ngClass]="{'bg-blue-500 text-white': selectedStyle === style, 'bg-gray-200': selectedStyle !== style}"
+                class="px-4 py-2 rounded cursor-pointer transition">
+          {{ style }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Paso 4: Intereses -->
+    <div *ngIf="step === 4" class="flex flex-col">
+      <h2 class="text-2xl font-bold mb-4">4. Intereses</h2>
+      <div class="flex items-center justify-center gap-4 mt-10">
+        <button *ngFor="let interest of interests" (click)="toggleInterest(interest)"
+                [ngClass]="{'bg-blue-500 text-white': selectedInterests.includes(interest), 'bg-gray-200': !selectedInterests.includes(interest)}"
+                class="px-4 py-2 rounded cursor-pointer transition">
+          {{ interest }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Botones de navegación -->
+  <div class="mt-6 flex justify-between">
+    <button (click)="prevStep()" [disabled]="step === 1" class="px-4 py-2 bg-gray-300 rounded disabled:opacity-50">Anterior</button>
+    <button (click)="nextStep()" 
+            [disabled]="(step===1 && !selectedCity) || (step===3 && !selectedStyle)"
+            class="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50">
+      {{ step === 4 ? 'Finalizar' : 'Siguiente' }}
+    </button>
+  </div>
+
+</div>
