@@ -2,7 +2,6 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgZone } from '@angular/core';
 
 @Component({
   selector: 'app-travel-wizard',
@@ -12,8 +11,6 @@ import { NgZone } from '@angular/core';
 })
 export class TravelWizardComponent {
   @Output() wizardCompleted = new EventEmitter<string>();
-
-  constructor(private zone: NgZone) {}
 
   step = 1;
 
@@ -45,17 +42,18 @@ export class TravelWizardComponent {
   }
 
   incrementDays() {
-    this.zone.run(() => {
-      this.days++;
-    });
+    this.days++;
   }
 
+  decrementDays() {
+    if (this.days > 1) this.days--;
+  }
 
-decrementDays() { 
-  this.zone.run(() => {
-    this.days = Math.max(1, this.days - 1);
-  });
-}
+  validateDays(value: number) {
+    // Evita que sea menor que 1
+    if (value < 1 || isNaN(value)) this.days = 1;
+    else this.days = Math.floor(value); // evita decimales
+  }
 
 isCountry(name: string): boolean {
   // Devuelve true si el nombre coincide con algún país de tus locations
