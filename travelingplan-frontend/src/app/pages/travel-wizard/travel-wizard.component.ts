@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ChangeDetectorRef } from '@angular/core';
+import { NgZone } from '@angular/core';
 
 @Component({
   selector: 'app-travel-wizard',
@@ -13,7 +13,7 @@ import { ChangeDetectorRef } from '@angular/core';
 export class TravelWizardComponent {
   @Output() wizardCompleted = new EventEmitter<string>();
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private zone: NgZone) {}
 
   step = 1;
 
@@ -45,14 +45,16 @@ export class TravelWizardComponent {
   }
 
   incrementDays() {
-  this.days++;
-  this.cdr.detectChanges(); // fuerza la actualización de la vista
-}
+    this.zone.run(() => {
+      this.days++;
+    });
+  }
 
 
-decrementDays() {
-  this.days = Math.max(1, this.days - 1);
-  this.cdr.detectChanges(); // fuerza la actualización de la vista
+decrementDays() { 
+  this.zone.run(() => {
+    this.days = Math.max(1, this.days - 1);
+  });
 }
 
 isCountry(name: string): boolean {
