@@ -18,13 +18,13 @@
     </div>
 
     <!-- Paso 2: Número de días -->
-    <div [class.hidden]="step !== 2" class="flex flex-col">
-      <h2 class="text-2xl font-bold mb-4">2. Número de días</h2>
-      <div class="flex items-center justify-center gap-4 mt-10">
+    <div *ngIf="step === 2" class="flex flex-col h-[50vh] sm:h-[40vh]">
+    <h2 class="text-2xl font-bold mb-4">2. Número de días</h2>
+    <div class="flex items-center justify-center gap-4 w-full max-w-xs mx-auto mt-10">
         <button (click)="decrementDays()" class="px-4 py-2 bg-gray-200 rounded">-</button>
         <span class="text-xl font-semibold">{{ days }}</span>
         <button (click)="incrementDays()" class="px-4 py-2 bg-gray-200 rounded">+</button>
-      </div>
+    </div>
     </div>
 
     <!-- Paso 3: Estilo -->
