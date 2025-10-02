@@ -6,16 +6,30 @@
     <!-- Paso 1: Destino -->
     <div *ngIf="step === 1">
       <h2 class="text-2xl font-bold mb-4">1. Selecciona tu destino</h2>
-      <input type="text" placeholder="Escribe para filtrar..." [(ngModel)]="searchText" class="w-full border rounded p-2 mb-2 box-border"/>
-      <ul class="border rounded max-h-48 overflow-auto">
-        <li *ngFor="let city of filteredCities()" (click)="selectCity(city)" class="p-2 hover:bg-blue-100 cursor-pointer">
-          {{ city.country }} - {{ city.name }}
-        </li>
-      </ul>
-      <p *ngIf="selectedCity" class="mt-2 text-green-600">
-        Has seleccionado: {{ selectedCity.country }} - {{ selectedCity.name }}
-      </p>
+
+      <div class="relative mt-10">
+        <input
+          type="text"
+          placeholder="Busca ciudad o país..."
+          [(ngModel)]="searchText"
+          (input)="filterOptions()"
+          class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        />
+
+        <!-- Panel -->
+        <div *ngIf="filteredOptions.length > 0 && searchText"
+            class="absolute z-10 mt-1 w-full bg-white border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+          <div *ngFor="let option of filteredOptions"
+              (click)="selectOption(option)"
+              class="flex items-center gap-3 px-4 py-2 cursor-pointer hover:bg-blue-50">
+            <img [src]="option.flag" alt="{{ option.name }} flag" class="w-6 h-4 rounded border" />
+            <span class="font-medium">{{ option.name }}</span>
+            <span *ngIf="option.type==='city'" class="text-gray-500 text-sm">({{ option.country }})</span>
+          </div>
+        </div>
+      </div>
     </div>
+
 
     <!-- Paso 2: Número de días -->
     <div *ngIf="step === 2" class="flex flex-col h-[50vh] sm:h-[40vh]">
@@ -40,10 +54,15 @@
     <!-- Paso 3: Estilo -->
     <div *ngIf="step === 3" class="flex flex-col">
       <h2 class="text-2xl font-bold mb-4">3. Estilo de viaje</h2>
-      <div class="flex items-center justify-center gap-4 mt-10">
-        <button *ngFor="let style of styles" (click)="selectedStyle = style"
-                [ngClass]="{'bg-blue-500 text-white': selectedStyle === style, 'bg-gray-200': selectedStyle !== style}"
-                class="px-4 py-2 rounded cursor-pointer transition">
+      
+      <div class="flex flex-wrap justify-center mt-4 sm:mt-10 gap-4">
+        <button *ngFor="let style of styles" 
+                (click)="selectedStyle = style"
+                [ngClass]="{
+                  'bg-blue-500 text-white': selectedStyle === style, 
+                  'bg-gray-200': selectedStyle !== style
+                }"
+                class="px-4 py-2 rounded cursor-pointer w-1/2 sm:w-auto text-center transition">
           {{ style }}
         </button>
       </div>
@@ -52,10 +71,10 @@
     <!-- Paso 4: Intereses -->
     <div *ngIf="step === 4" class="flex flex-col">
       <h2 class="text-2xl font-bold mb-4">4. Intereses</h2>
-      <div class="flex items-center justify-center gap-4 mt-10">
+      <div class="flex flex-wrap justify-center mt-4 sm:mt-10 gap-4">
         <button *ngFor="let interest of interests" (click)="toggleInterest(interest)"
                 [ngClass]="{'bg-blue-500 text-white': selectedInterests.includes(interest), 'bg-gray-200': !selectedInterests.includes(interest)}"
-                class="px-4 py-2 rounded cursor-pointer transition">
+                class="px-4 py-2 rounded cursor-pointer w-1/2 sm:w-auto text-center transition">
           {{ interest }}
         </button>
       </div>
@@ -67,7 +86,7 @@
   <div class="mt-6 flex justify-between">
     <button (click)="prevStep()" [disabled]="step === 1" class="px-4 py-2 bg-gray-300 rounded disabled:opacity-50">Anterior</button>
     <button (click)="nextStep()" 
-            [disabled]="(step===1 && !selectedCity) || (step===3 && !selectedStyle)"
+            [disabled]="(step===1 && !selectedCountry && !selectedCity && !searchText) || (step===3 && !selectedStyle)"
             class="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50">
       {{ step === 4 ? 'Finalizar' : 'Siguiente' }}
     </button>
